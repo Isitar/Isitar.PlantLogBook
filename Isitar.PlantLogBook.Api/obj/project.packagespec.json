@@ -29,6 +29,24 @@
   },
   "frameworks": {
     "netcoreapp3.1": {
+      "dependencies": {
+        "FluentValidation.DependencyInjectionExtensions": {
+          "target": "Package",
+          "version": "[8.6.1, )"
+        },
+        "MediatR": {
+          "target": "Package",
+          "version": "[8.0.0, )"
+        },
+        "MediatR.Extensions.Microsoft.DependencyInjection": {
+          "target": "Package",
+          "version": "[8.0.0, )"
+        },
+        "Swashbuckle.AspNetCore": {
+          "target": "Package",
+          "version": "[5.0.0, )"
+        }
+      },
       "imports": [
         "net461",
         "net462",
