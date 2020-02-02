@@ -1183,7 +1183,7 @@
       "outputPath": "/home/palu/Projects/Isitar.PlantLogBook/Isitar.PlantLogBook.Api/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/palu/.nuget/NuGet/NuGet.Config"
+        "/home/palu/.config/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp3.1"
