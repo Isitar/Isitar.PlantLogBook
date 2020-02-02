@@ -123,12 +123,12 @@ namespace Isitar.PlantLogBook.Core.Tests
         }
 
         [Fact]
-        public async Task GetSingle()
+        public async Task GetSinglePlantSpecies()
         {
             var id = Guid.NewGuid();
             var name = "Something 123";
 
-            await using var context = DatabaseHelper.CreateInMemoryDatabaseContext(nameof(GetSingle));
+            await using var context = DatabaseHelper.CreateInMemoryDatabaseContext(nameof(GetSinglePlantSpecies));
             await context.PlantSpecies.AddAsync(new PlantSpecies {Id = id, Name = name});
             await context.SaveChangesAsync();
 
@@ -142,6 +142,27 @@ namespace Isitar.PlantLogBook.Core.Tests
             var queryNonExisting = new GetPlantSpeciesByIdQuery {Id = Guid.NewGuid()};
             var resultNonExisting = await queryHandler.Handle(queryNonExisting, CancellationToken.None);
             Assert.False(resultNonExisting.Success);
+        }
+
+        [Fact]
+        public async Task DeletePlantSpecies()
+        {
+            var id = Guid.NewGuid();
+            var name = "Something 123";
+
+            await using var context = DatabaseHelper.CreateInMemoryDatabaseContext(nameof(DeletePlantSpecies));
+            await context.PlantSpecies.AddAsync(new PlantSpecies {Id = id, Name = name});
+            await context.SaveChangesAsync();
+            
+            var deleteCmd = new DeletePlantSpeciesCommand {Id = id};
+            var deleteHandler = new DeletePlantSpeciesCommandHandler(context);
+            var deleteResult = await deleteHandler.Handle(deleteCmd, CancellationToken.None);
+            Assert.True(deleteResult.Success);
+            Assert.Empty(context.PlantSpecies);
+            
+            var deleteResult2 = await deleteHandler.Handle(deleteCmd, CancellationToken.None);
+            Assert.False(deleteResult2.Success);
+
         }
     }
 }
