@@ -12,8 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Handlers" />
-      <Folder Include="Queries" />
+      <Folder Include="Data\Migrations" />
     </ItemGroup>
 
 </Project>

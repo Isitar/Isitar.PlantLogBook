@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Isitar.PlantLogBook.Core.Responses
 {
-    public abstract class Response
+    public class Response
     {
         public virtual bool Success { get; set; }
 

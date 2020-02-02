@@ -6,10 +6,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Controllers" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\Isitar.PlantLogBook.Core\Isitar.PlantLogBook.Core.csproj" />
     </ItemGroup>
 

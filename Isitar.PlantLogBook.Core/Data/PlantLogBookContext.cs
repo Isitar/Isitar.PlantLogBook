@@ -1,7 +1,7 @@
-using Isitar.PlantLogBook.Core.Database.DAO;
+using Isitar.PlantLogBook.Core.Data.DAO;
 using Microsoft.EntityFrameworkCore;
 
-namespace Isitar.PlantLogBook.Core.Database
+namespace Isitar.PlantLogBook.Core.Data
 {
     public class PlantLogBookContext : DbContext
     {

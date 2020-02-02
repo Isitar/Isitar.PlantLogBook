@@ -6,7 +6,7 @@ using FluentValidation;
 using Isitar.PlantLogBook.Api.Installers;
 using Isitar.PlantLogBook.Core.Behaviors;
 using Isitar.PlantLogBook.Core.Commands;
-using Isitar.PlantLogBook.Core.Database;
+using Isitar.PlantLogBook.Core.Data;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
