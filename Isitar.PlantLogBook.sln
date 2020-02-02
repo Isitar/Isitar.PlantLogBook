@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Isitar.PlantLogBook.Core", "Isitar.PlantLogBook.Core\Isitar.PlantLogBook.Core.csproj", "{CFB38643-86E6-438A-9678-CE3CA8755A26}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Isitar.PlantLogBook.Api", "Isitar.PlantLogBook.Api\Isitar.PlantLogBook.Api.csproj", "{0B3E499B-6D31-4BFA-AA46-19C1D34D1ACF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CFB38643-86E6-438A-9678-CE3CA8755A26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFB38643-86E6-438A-9678-CE3CA8755A26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFB38643-86E6-438A-9678-CE3CA8755A26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFB38643-86E6-438A-9678-CE3CA8755A26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B3E499B-6D31-4BFA-AA46-19C1D34D1ACF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B3E499B-6D31-4BFA-AA46-19C1D34D1ACF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B3E499B-6D31-4BFA-AA46-19C1D34D1ACF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B3E499B-6D31-4BFA-AA46-19C1D34D1ACF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
