@@ -1,5 +1,7 @@
 # Plant Log Book
 
+[![Build Status](https://travis-ci.com/Isitar/Isitar.PlantLogBook.svg?branch=master)](https://travis-ci.com/Isitar/Isitar.PlantLogBook)
+
 Simple plant log book application
 
 ## Generate Migrations
