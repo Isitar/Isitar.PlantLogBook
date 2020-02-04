@@ -3,15 +3,17 @@ using System;
 using Isitar.PlantLogBook.Core.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Isitar.PlantLogBook.Core.Data.Migrations
 {
     [DbContext(typeof(PlantLogBookContext))]
-    partial class PlantLogBookContextModelSnapshot : ModelSnapshot
+    [Migration("20200204203119_PlantData")]
+    partial class PlantData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

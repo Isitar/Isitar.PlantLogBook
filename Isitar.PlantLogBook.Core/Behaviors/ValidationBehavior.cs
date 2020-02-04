@@ -27,7 +27,7 @@ namespace Isitar.PlantLogBook.Core.Behaviors
                 .SelectMany(res => res.Errors)
                 .Where(err => null != err)
                 .ToList();
-            if (failures.Count != 0)
+            if (failures.Any())
             {
                 var response = Activator.CreateInstance<TResponse>();
                 response.Success = false;

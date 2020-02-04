@@ -59,7 +59,8 @@ namespace Isitar.PlantLogBook.Api.Controllers.V1
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<Plant>> Create(CreatePlantRequest request)
         {
-            var command = new CreatePlantCommand {Id = Guid.NewGuid(), PlantSpeciesId = request.PlantSpeciesId};
+            var command = new CreatePlantCommand
+                {Id = Guid.NewGuid(), PlantSpeciesId = request.PlantSpeciesId, Name = request.Name};
             var response = await mediator.Send(command);
             if (!response.Success)
             {
@@ -78,7 +79,10 @@ namespace Isitar.PlantLogBook.Api.Controllers.V1
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<Plant>> Update(Guid plantId, UpdatePlantRequest request)
         {
-            var command = new UpdatePlantCommand {Id = plantId, PlantSpeciesId = request.PlantSpeciesId};
+            var command = new UpdatePlantCommand
+            {
+                Id = plantId, PlantSpeciesId = request.PlantSpeciesId, Name = request.Name, IsActive = request.IsActive
+            };
             var response = await mediator.Send(command);
             if (!response.Success)
             {

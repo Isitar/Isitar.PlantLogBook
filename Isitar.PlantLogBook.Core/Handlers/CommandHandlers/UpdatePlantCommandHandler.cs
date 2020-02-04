@@ -2,6 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Isitar.PlantLogBook.Core.Commands;
 using Isitar.PlantLogBook.Core.Data;
+using Isitar.PlantLogBook.Core.Data.DAO;
 using Isitar.PlantLogBook.Core.Responses;
 using MediatR;
 
@@ -27,6 +28,8 @@ namespace Isitar.PlantLogBook.Core.Handlers.CommandHandlers
             }
 
             plant.PlantSpeciesId = request.PlantSpeciesId;
+            plant.Name = request.Name;
+            plant.PlantState = request.IsActive ? PlantState.Active : PlantState.Inactive;
             await dbContext.SaveChangesAsync(cancellationToken);
             return new Response {Success = true};
         }

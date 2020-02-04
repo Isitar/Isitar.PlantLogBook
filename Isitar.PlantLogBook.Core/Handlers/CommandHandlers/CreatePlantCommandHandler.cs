@@ -22,7 +22,9 @@ namespace Isitar.PlantLogBook.Core.Handlers.CommandHandlers
             dbContext.Plants.Add(new Plant
             {
                 Id = request.Id,
-                PlantSpeciesId = request.PlantSpeciesId
+                PlantSpeciesId = request.PlantSpeciesId,
+                Name = request.Name,
+                PlantState = PlantState.Active,
             });
             await dbContext.SaveChangesAsync(cancellationToken);
             return new Response
