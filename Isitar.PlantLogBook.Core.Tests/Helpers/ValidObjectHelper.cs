@@ -1,18 +1,16 @@
 using System;
 using Isitar.PlantLogBook.Core.Data.DAO;
 
-namespace Isitar.PlantLogBook.Core.Tests
+namespace Isitar.PlantLogBook.Core.Tests.Helpers
 {
-    public class ValidObjectHelper
+    class ValidObjectHelper
     {
-        public const names = [
-        ]
         
-        Random rnd = new Random();
+        private static Random rnd = new Random();
         public static PlantSpecies ValidPlantSpecies()
         {
-            
-            return new PlantSpecies {Id = Guid.NewGuid(), Name = };
+            var name =$"{NameList.FirstNames[rnd.Next(NameList.FirstNames.Length)]} {NameList.Names[rnd.Next(NameList.Names.Length)]}";
+            return new PlantSpecies {Id = Guid.NewGuid(), Name = name};
         }
     }
 }
