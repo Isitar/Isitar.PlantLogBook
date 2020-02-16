@@ -135,8 +135,8 @@ namespace Isitar.PlantLogBook.Core.Tests
             var queryHandler = new GetPlantSpeciesByIdQueryHandler(context);
             var result = await queryHandler.Handle(querySingle, CancellationToken.None);
             Assert.True(result.Success);
-            Assert.Equal(result.Data.Id, id);
-            Assert.Equal(result.Data.Name, name);
+            Assert.Equal(id, result.Data.Id);
+            Assert.Equal(name, result.Data.Name);
 
             var queryNonExisting = new GetPlantSpeciesByIdQuery {Id = Guid.NewGuid()};
             var resultNonExisting = await queryHandler.Handle(queryNonExisting, CancellationToken.None);
