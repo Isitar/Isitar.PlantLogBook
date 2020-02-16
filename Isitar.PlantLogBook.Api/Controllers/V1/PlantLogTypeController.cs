@@ -7,104 +7,97 @@ using Isitar.PlantLogBook.Api.Contracts.V1.Requests;
 using Isitar.PlantLogBook.Api.Contracts.V1.Responses;
 using Isitar.PlantLogBook.Core.Commands;
 using Isitar.PlantLogBook.Core.Queries;
-using Isitar.PlantLogBook.Core.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Isitar.PlantLogBook.Api.Controllers.V1
 {
-    public class PlantController : ApiController
+    public class PlantLogTypeController : ApiController
     {
         private readonly IMediator mediator;
 
-        public PlantController(IMediator mediator)
+        public PlantLogTypeController(IMediator mediator)
         {
             this.mediator = mediator;
         }
 
-        #region PlantCRUD
-
-        [HttpGet(ApiRoutes.Plant.Get)]
+        [HttpGet(ApiRoutes.PlantLogType.Get)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Plant>> Get(Guid plantId)
+        public async Task<ActionResult<PlantLogType>> Get(Guid plantSpeciesId)
         {
-            var query = new GetPlantByIdQuery {Id = plantId};
+            var query = new GetPlantLogTypeByIdQuery {Id = plantSpeciesId};
             var response = await mediator.Send(query);
             if (!response.Success)
             {
                 return BadRequest(response.ErrorMessages);
             }
 
-            return Ok(Plant.FromCore(response.Data));
+            return Ok(PlantLogType.FromCore(response.Data));
         }
 
-        [HttpGet(ApiRoutes.Plant.GetAll)]
+        [HttpGet(ApiRoutes.PlantLogType.GetAll)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<IList<Plant>>> GetAll()
+        public async Task<ActionResult<IList<PlantLogType>>> GetAll([FromQuery] GetAllPlantLogTypesRequest request)
         {
-            var query = new GetAllPlantsQuery();
+            var query = new GetAllPlantLogTypesQuery {NameFilter = request.NameFilter};
             var response = await mediator.Send(query);
             if (!response.Success)
             {
                 return BadRequest(response.ErrorMessages);
             }
 
-            var responseData = response.Data.Select(Plant.FromCore);
+            var responseData = response.Data.Select(PlantLogType.FromCore);
             return Ok(responseData);
         }
 
-        [HttpPost(ApiRoutes.Plant.Create)]
+        [HttpPost(ApiRoutes.PlantLogType.Create)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Plant>> Create(CreatePlantRequest request)
+        public async Task<ActionResult<PlantLogType>> Create(CreatePlantLogTypeRequest request)
         {
-            var command = new CreatePlantCommand
-                {Id = Guid.NewGuid(), PlantSpeciesId = request.PlantSpeciesId, Name = request.Name};
+            var command = new CreatePlantLogTypeCommand {Id = Guid.NewGuid(), Name = request.Name};
             var response = await mediator.Send(command);
             if (!response.Success)
             {
                 return BadRequest(response.ErrorMessages);
             }
 
-            var createdQuery = new GetPlantByIdQuery {Id = command.Id};
+            var createdQuery = new GetPlantLogTypeByIdQuery {Id = command.Id};
             var createdResult = await mediator.Send(createdQuery);
-            var createdObj = Plant.FromCore(createdResult.Data);
+            var createdObj = PlantLogType.FromCore(createdResult.Data);
 
-            return CreatedAtAction(nameof(Get), new {plantId = command.Id}, createdObj);
+            return CreatedAtAction(nameof(Get), new {plantSpeciesId = command.Id}, createdObj);
         }
 
-        [HttpPut(ApiRoutes.Plant.Update)]
+        [HttpPut(ApiRoutes.PlantLogType.Update)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Plant>> Update(Guid plantId, UpdatePlantRequest request)
+        public async Task<ActionResult<PlantLogType>> Update(Guid plantSpeciesId, UpdatePlantLogTypeRequest request)
         {
-            var command = new UpdatePlantCommand
-            {
-                Id = plantId, PlantSpeciesId = request.PlantSpeciesId, Name = request.Name, IsActive = request.IsActive
-            };
+            var command = new UpdatePlantLogTypeCommand {Id = plantSpeciesId, Name = request.Name};
             var response = await mediator.Send(command);
             if (!response.Success)
             {
                 return BadRequest(response.ErrorMessages);
             }
 
-            var updatedQuery = new GetPlantByIdQuery {Id = command.Id};
+            var updatedQuery = new GetPlantLogTypeByIdQuery {Id = command.Id};
             var updatedResult = await mediator.Send(updatedQuery);
-            var updatedObj = Plant.FromCore(updatedResult.Data);
+            var updatedObj = PlantLogType.FromCore(updatedResult.Data);
 
             return Ok(updatedObj);
         }
 
 
-        [HttpDelete(ApiRoutes.Plant.Delete)]
+        [HttpDelete(ApiRoutes.PlantLogType.Delete)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> Delete(Guid plantId)
+        public async Task<ActionResult> Delete(Guid plantSpeciesId)
         {
-            var command = new DeletePlantCommand {Id = plantId};
+            var command = new DeletePlantLogTypeCommand {Id = plantSpeciesId};
             var response = await mediator.Send(command);
             if (!response.Success)
             {
@@ -113,24 +106,5 @@ namespace Isitar.PlantLogBook.Api.Controllers.V1
 
             return Ok();
         }
-
-        #endregion
-
-        [HttpGet(ApiRoutes.Plant.GetAllPlantLogs)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<IList<PlantLog>>> GetAllPlantLogs(Guid plantId)
-        {
-            var query = new GetAllPlantLogsQuery {PlantId = plantId};
-            var response = await mediator.Send(query);
-            if (!response.Success)
-            {
-                return BadRequest(response.ErrorMessages);
-            }
-
-            var responseData = response.Data.Select(PlantLog.FromCore);
-            return Ok(responseData);
-        }
-
     }
 }

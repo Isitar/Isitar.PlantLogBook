@@ -10,25 +10,25 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Isitar.PlantLogBook.Core.Handlers.QueryHandlers
 {
-    public class GetAllPlantSpeciesQueryHandler : IRequestHandler<GetAllPlantSpeciesQuery, PlantSpeciesDtosResponse>
+    public class GetAllPlantLogTypesQueryHandler : IRequestHandler<GetAllPlantLogTypesQuery, PlantLogTypeDtosResponse>
     {
         private readonly PlantLogBookContext dbContext;
 
-        public GetAllPlantSpeciesQueryHandler(PlantLogBookContext dbContext)
+        public GetAllPlantLogTypesQueryHandler(PlantLogBookContext dbContext)
         {
             this.dbContext = dbContext;
         }
 
-        public async Task<PlantSpeciesDtosResponse> Handle(GetAllPlantSpeciesQuery request, CancellationToken cancellationToken)
+        public async Task<PlantLogTypeDtosResponse> Handle(GetAllPlantLogTypesQuery request, CancellationToken cancellationToken)
         {
-            var query = dbContext.PlantSpecies.AsQueryable();
+            var query = dbContext.PlantLogTypes.AsQueryable();
             if (!string.IsNullOrWhiteSpace(request.NameFilter))
             {
-                query = query.Where(ps => ps.Name.Contains(request.NameFilter));    
+                query = query.Where(plt => plt.Name.Contains(request.NameFilter));    
             }
 
-            var results = await query.Select(ps => PlantSpeciesDto.FromDao(ps)).ToListAsync(cancellationToken);
-            return new PlantSpeciesDtosResponse
+            var results = await query.Select(plt => PlantLogTypeDto.FromDao(plt)).ToListAsync(cancellationToken);
+            return new PlantLogTypeDtosResponse
             {
                 Success = true,
                 Data = results,
