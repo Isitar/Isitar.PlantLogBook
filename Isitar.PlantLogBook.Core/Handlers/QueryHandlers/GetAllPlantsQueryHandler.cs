@@ -7,6 +7,7 @@ using Isitar.PlantLogBook.Core.Data.DAO;
 using Isitar.PlantLogBook.Core.Queries;
 using Isitar.PlantLogBook.Core.Responses;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Isitar.PlantLogBook.Core.Handlers.QueryHandlers
 {
@@ -23,7 +24,7 @@ namespace Isitar.PlantLogBook.Core.Handlers.QueryHandlers
         {
             var query = dbContext.Plants.AsQueryable();
 
-            var results = query.Select(plant => PlantDto.FromDao(plant));
+            var results = await query.Select(plant => PlantDto.FromDao(plant)).ToListAsync(cancellationToken: cancellationToken);
             return new PlantDtosResponse()
             {
                 Success = true,
