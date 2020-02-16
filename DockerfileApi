@@ -3,6 +3,7 @@ WORKDIR /src
 COPY *.sln ./
 COPY ./Isitar.PlantLogBook.Api/*.csproj ./Isitar.PlantLogBook.Api/
 COPY ./Isitar.PlantLogBook.Core/*.csproj ./Isitar.PlantLogBook.Core/
+COPY ./Isitar.PlantLogBook.Core.Tests/*.csproj ./Isitar.PlantLogBook.Core.Tests/
 RUN dotnet restore
 
 COPY . .

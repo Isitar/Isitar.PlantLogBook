@@ -53,11 +53,11 @@ namespace Isitar.PlantLogBook.Api.Contracts.V1
         {
             private const string PlantLogTypeBase = Base + "/plant-log-type";
             public const string GetAll = PlantLogTypeBase;
-            public const string Get = PlantLogTypeBase + "/{logTypeId}";
+            public const string Get = PlantLogTypeBase + "/{plantLogTypeId}";
 
             public const string Create = PlantLogTypeBase;
-            public const string Update = PlantLogTypeBase + "/{logTypeId}";
-            public const string Delete = PlantLogTypeBase + "/{logTypeId}";
+            public const string Update = PlantLogTypeBase + "/{plantLogTypeId}";
+            public const string Delete = PlantLogTypeBase + "/{plantLogTypeId}";
         }
     }
 }

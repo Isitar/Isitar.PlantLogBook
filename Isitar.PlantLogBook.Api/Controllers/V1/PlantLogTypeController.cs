@@ -25,9 +25,9 @@ namespace Isitar.PlantLogBook.Api.Controllers.V1
         [HttpGet(ApiRoutes.PlantLogType.Get)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<PlantLogType>> Get(Guid plantSpeciesId)
+        public async Task<ActionResult<PlantLogType>> Get(Guid plantLogTypeId)
         {
-            var query = new GetPlantLogTypeByIdQuery {Id = plantSpeciesId};
+            var query = new GetPlantLogTypeByIdQuery {Id = plantLogTypeId};
             var response = await mediator.Send(query);
             if (!response.Success)
             {
@@ -69,15 +69,15 @@ namespace Isitar.PlantLogBook.Api.Controllers.V1
             var createdResult = await mediator.Send(createdQuery);
             var createdObj = PlantLogType.FromCore(createdResult.Data);
 
-            return CreatedAtAction(nameof(Get), new {plantSpeciesId = command.Id}, createdObj);
+            return CreatedAtAction(nameof(Get), new {plantLogTypeId = command.Id}, createdObj);
         }
 
         [HttpPut(ApiRoutes.PlantLogType.Update)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<PlantLogType>> Update(Guid plantSpeciesId, UpdatePlantLogTypeRequest request)
+        public async Task<ActionResult<PlantLogType>> Update(Guid plantLogTypeId, UpdatePlantLogTypeRequest request)
         {
-            var command = new UpdatePlantLogTypeCommand {Id = plantSpeciesId, Name = request.Name};
+            var command = new UpdatePlantLogTypeCommand {Id = plantLogTypeId, Name = request.Name};
             var response = await mediator.Send(command);
             if (!response.Success)
             {
@@ -95,9 +95,9 @@ namespace Isitar.PlantLogBook.Api.Controllers.V1
         [HttpDelete(ApiRoutes.PlantLogType.Delete)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> Delete(Guid plantSpeciesId)
+        public async Task<ActionResult> Delete(Guid plantLogTypeId)
         {
-            var command = new DeletePlantLogTypeCommand {Id = plantSpeciesId};
+            var command = new DeletePlantLogTypeCommand {Id = plantLogTypeId};
             var response = await mediator.Send(command);
             if (!response.Success)
             {
