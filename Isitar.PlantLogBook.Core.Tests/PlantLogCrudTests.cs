@@ -1,5 +1,7 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
+using FluentValidation.TestHelper;
 using Isitar.PlantLogBook.Core.Commands;
 using Isitar.PlantLogBook.Core.Handlers.CommandHandlers;
 using Isitar.PlantLogBook.Core.Tests.Helpers;
@@ -10,6 +12,139 @@ namespace Isitar.PlantLogBook.Core.Tests
 {
     public class PlantLogCrudTests
     {
+        [Fact]
+        public async Task TestCreateValidator()
+        {
+            await using var context = DatabaseHelper.CreateInMemoryDatabaseContext(nameof(TestCreateValidator));
+            // setup
+            var logType = ValidObjectHelper.ValidPlantLogType();
+            var plantSpecies = ValidObjectHelper.ValidPlantSpecies();
+            var plant = ValidObjectHelper.ValidPlant(plantSpecies);
+            await context.AddRangeAsync(logType, plantSpecies, plant);
+            await context.SaveChangesAsync();
+
+
+            var validator = new CreatePlantLogForPlantCommandValidator(context);
+            var createValidCmd = new CreatePlantLogForPlantCommand
+            {
+                Id = Guid.NewGuid(),
+                PlantId = plant.Id,
+                PlantLogTypeId = logType.Id,
+                DateTime = DateTime.Now,
+                Log = LoremIpsum.Words(2),
+            };
+            validator.ShouldNotHaveValidationErrorFor(plantLogCmd => plantLogCmd.Id, createValidCmd);
+            validator.ShouldNotHaveValidationErrorFor(plantLogCmd => plantLogCmd.PlantId, createValidCmd);
+            validator.ShouldNotHaveValidationErrorFor(plantLogCmd => plantLogCmd.PlantLogTypeId, createValidCmd);
+            validator.ShouldNotHaveValidationErrorFor(plantLogCmd => plantLogCmd.DateTime, createValidCmd);
+            validator.ShouldNotHaveValidationErrorFor(plantLogCmd => plantLogCmd.Log, createValidCmd);
+
+            //invalid plant log type
+            var createInvalidLogTypeCmd = new CreatePlantLogForPlantCommand
+            {
+                Id = Guid.NewGuid(),
+                PlantId = plant.Id,
+                PlantLogTypeId = Guid.NewGuid(),
+                DateTime = DateTime.Now,
+                Log = LoremIpsum.Words(2),
+            };
+            validator.ShouldNotHaveValidationErrorFor(plantLogCmd => plantLogCmd.Id, createInvalidLogTypeCmd);
+            validator.ShouldNotHaveValidationErrorFor(plantLogCmd => plantLogCmd.PlantId, createInvalidLogTypeCmd);
+            validator.ShouldHaveValidationErrorFor(plantLogCmd => plantLogCmd.PlantLogTypeId, createInvalidLogTypeCmd);
+            validator.ShouldNotHaveValidationErrorFor(plantLogCmd => plantLogCmd.DateTime, createInvalidLogTypeCmd);
+            validator.ShouldNotHaveValidationErrorFor(plantLogCmd => plantLogCmd.Log, createInvalidLogTypeCmd);
+
+            //invalid plant log type
+            var createInvalidPlantCmd = new CreatePlantLogForPlantCommand
+            {
+                Id = Guid.NewGuid(),
+                PlantId = Guid.NewGuid(),
+                PlantLogTypeId = logType.Id,
+                DateTime = DateTime.Now,
+                Log = LoremIpsum.Words(2),
+            };
+            validator.ShouldNotHaveValidationErrorFor(plantLogCmd => plantLogCmd.Id, createInvalidPlantCmd);
+            validator.ShouldHaveValidationErrorFor(plantLogCmd => plantLogCmd.PlantId, createInvalidPlantCmd);
+            validator.ShouldNotHaveValidationErrorFor(plantLogCmd => plantLogCmd.PlantLogTypeId, createInvalidPlantCmd);
+            validator.ShouldNotHaveValidationErrorFor(plantLogCmd => plantLogCmd.DateTime, createInvalidPlantCmd);
+            validator.ShouldNotHaveValidationErrorFor(plantLogCmd => plantLogCmd.Log, createInvalidPlantCmd);
+
+            //invalid id
+            var createInvalidIdCmd = new CreatePlantLogForPlantCommand
+            {
+                Id = Guid.Empty,
+                PlantId = plant.Id,
+                PlantLogTypeId = logType.Id,
+                DateTime = DateTime.Now,
+                Log = LoremIpsum.Words(2),
+            };
+            validator.ShouldHaveValidationErrorFor(plantLogCmd => plantLogCmd.Id, createInvalidIdCmd);
+            validator.ShouldNotHaveValidationErrorFor(plantLogCmd => plantLogCmd.PlantId, createInvalidIdCmd);
+            validator.ShouldNotHaveValidationErrorFor(plantLogCmd => plantLogCmd.PlantLogTypeId, createInvalidIdCmd);
+            validator.ShouldNotHaveValidationErrorFor(plantLogCmd => plantLogCmd.DateTime, createInvalidIdCmd);
+            validator.ShouldNotHaveValidationErrorFor(plantLogCmd => plantLogCmd.Log, createInvalidIdCmd);
+        }
+
+        [Fact]
+        public async Task TestUpdateForPlantValidator()
+        {
+            await using var context = DatabaseHelper.CreateInMemoryDatabaseContext(nameof(TestUpdateForPlantValidator));
+            // setup
+            var logType = ValidObjectHelper.ValidPlantLogType();
+            var plantSpecies = ValidObjectHelper.ValidPlantSpecies();
+            var plant1 = ValidObjectHelper.ValidPlant(plantSpecies);
+            var plant2 = ValidObjectHelper.ValidPlant(plantSpecies);
+            var logPlant1 = ValidObjectHelper.ValidPlantLog(plant1, logType);
+            var logPlant2 = ValidObjectHelper.ValidPlantLog(plant2, logType);
+            await context.AddRangeAsync(logType, plantSpecies, plant1, plant2, logPlant1, logPlant2);
+            await context.SaveChangesAsync();
+
+
+            var validator = new UpdatePlantLogForPlantCommandValidator(context);
+            var updateValid = new UpdatePlantLogForPlantCommand
+            {
+                Id = logPlant1.Id,
+                PlantId = plant1.Id,
+                PlantLogTypeId = logType.Id,
+                DateTime = DateTime.Now,
+                Log = LoremIpsum.Words(2)
+            };
+            validator.ShouldNotHaveValidationErrorFor(updatePlantLogForPlantCommand => updatePlantLogForPlantCommand.Id, updateValid);
+            validator.ShouldNotHaveValidationErrorFor(updatePlantLogForPlantCommand => updatePlantLogForPlantCommand.PlantId, updateValid);
+            validator.ShouldNotHaveValidationErrorFor(updatePlantLogForPlantCommand => updatePlantLogForPlantCommand.PlantLogTypeId, updateValid);
+            validator.ShouldNotHaveValidationErrorFor(updatePlantLogForPlantCommand => updatePlantLogForPlantCommand.DateTime, updateValid);
+            validator.ShouldNotHaveValidationErrorFor(updatePlantLogForPlantCommand => updatePlantLogForPlantCommand.Log, updateValid);
+            
+            // wrong plant id
+            var updateInvalidPlantId = new UpdatePlantLogForPlantCommand
+            {
+                Id = logPlant1.Id,
+                PlantId = plant2.Id,
+                PlantLogTypeId = logType.Id,
+                DateTime = DateTime.Now,
+                Log = LoremIpsum.Words(2)
+            };
+            validator.ShouldNotHaveValidationErrorFor(updatePlantLogForPlantCommand => updatePlantLogForPlantCommand.Id, updateInvalidPlantId);
+            validator.ShouldHaveValidationErrorFor(updatePlantLogForPlantCommand => updatePlantLogForPlantCommand.PlantId, updateInvalidPlantId);
+            validator.ShouldNotHaveValidationErrorFor(updatePlantLogForPlantCommand => updatePlantLogForPlantCommand.PlantLogTypeId, updateInvalidPlantId);
+            validator.ShouldNotHaveValidationErrorFor(updatePlantLogForPlantCommand => updatePlantLogForPlantCommand.DateTime, updateInvalidPlantId);
+            validator.ShouldNotHaveValidationErrorFor(updatePlantLogForPlantCommand => updatePlantLogForPlantCommand.Log, updateInvalidPlantId);
+            
+            // wrong log type id
+            var updateInvalidLogType = new UpdatePlantLogForPlantCommand
+            {
+                Id = logPlant1.Id,
+                PlantId = plant1.Id,
+                PlantLogTypeId = Guid.NewGuid(),
+                DateTime = DateTime.Now,
+                Log = LoremIpsum.Words(2)
+            };
+            validator.ShouldNotHaveValidationErrorFor(updatePlantLogForPlantCommand => updatePlantLogForPlantCommand.Id, updateInvalidLogType);
+            validator.ShouldNotHaveValidationErrorFor(updatePlantLogForPlantCommand => updatePlantLogForPlantCommand.PlantId, updateInvalidLogType);
+            validator.ShouldHaveValidationErrorFor(updatePlantLogForPlantCommand => updatePlantLogForPlantCommand.PlantLogTypeId, updateInvalidLogType);
+            validator.ShouldNotHaveValidationErrorFor(updatePlantLogForPlantCommand => updatePlantLogForPlantCommand.DateTime, updateInvalidLogType);
+            validator.ShouldNotHaveValidationErrorFor(updatePlantLogForPlantCommand => updatePlantLogForPlantCommand.Log, updateInvalidLogType);
+        }
         //  [Fact]
         // public async Task CreatePlantLog()
         // {
