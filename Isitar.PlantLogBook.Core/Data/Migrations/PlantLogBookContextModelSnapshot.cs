@@ -108,12 +108,12 @@ namespace Isitar.PlantLogBook.Core.Data.Migrations
             modelBuilder.Entity("Isitar.PlantLogBook.Core.Data.DAO.PlantLog", b =>
                 {
                     b.HasOne("Isitar.PlantLogBook.Core.Data.DAO.Plant", "Plant")
-                        .WithMany()
+                        .WithMany("PlantLogs")
                         .HasForeignKey("PlantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Isitar.PlantLogBook.Core.Data.DAO.PlantLogType", "LogType")
+                    b.HasOne("Isitar.PlantLogBook.Core.Data.DAO.PlantLogType", "PlantLogType")
                         .WithMany()
                         .HasForeignKey("PlantLogTypeId")
                         .OnDelete(DeleteBehavior.Cascade)

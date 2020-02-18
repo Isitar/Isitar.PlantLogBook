@@ -116,49 +116,48 @@ namespace Isitar.PlantLogBook.Api.Controllers.V1
 
         #endregion
 
-        
+
         [HttpGet(ApiRoutes.Plant.GetPlantLog)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<PlantLog>> GetPlantLog(Guid plantId, Guid logId)
         {
-            throw new NotImplementedException();
-            var query = new GetPlantByIdQuery {Id = plantId};
+            var query = new GetPlantLogForPlantByIdQuery {Id = logId, PlantId = plantId};
             var response = await mediator.Send(query);
             if (!response.Success)
             {
                 return BadRequest(response.ErrorMessages);
             }
 
-            return Ok(Plant.FromCore(response.Data));
+            return Ok(PlantLog.FromCore(response.Data));
         }
-        
+
         [HttpGet(ApiRoutes.Plant.GetAllPlantLogs)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<IList<PlantLog>>> GetAllPlantLogs(Guid plantId, [FromQuery] GetAllPlantLogsRequest request)
+        public async Task<ActionResult<IList<PlantLog>>> GetAllPlantLogs(Guid plantId, [FromQuery] GetAllPlantLogsForPlantRequest forPlantRequest)
         {
             var query = new GetAllPlantLogsQuery {PlantId = plantId};
-            if (null != request.PlantLogTypes)
+            if (null != forPlantRequest.PlantLogTypes)
             {
-                query.PlantLogTypes = request.PlantLogTypes;
+                query.PlantLogTypes = forPlantRequest.PlantLogTypes;
             }
 
-            if (null != request.FromDateTime)
+            if (null != forPlantRequest.FromDateTime)
             {
-                query.FromDateTime = request.FromDateTime.Value;
+                query.FromDateTime = forPlantRequest.FromDateTime.Value;
             }
 
-            if (null != request.ToDateTime)
+            if (null != forPlantRequest.ToDateTime)
             {
-                query.ToDateTime = request.ToDateTime.Value;
+                query.ToDateTime = forPlantRequest.ToDateTime.Value;
             }
 
-            if (!string.IsNullOrWhiteSpace(request.LogFilter))
+            if (!string.IsNullOrWhiteSpace(forPlantRequest.LogFilter))
             {
-                query.LogFilter = request.LogFilter;
+                query.LogFilter = forPlantRequest.LogFilter;
             }
-            
+
             var response = await mediator.Send(query);
             if (!response.Success)
             {
@@ -169,30 +168,31 @@ namespace Isitar.PlantLogBook.Api.Controllers.V1
             return Ok(responseData);
         }
 
-        
-        
+
         [HttpPost(ApiRoutes.Plant.CreatePlantLog)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Plant>> CreatePlantLog(CreatePlantRequest request)
+        public async Task<ActionResult<PlantLog>> CreatePlantLog(Guid plantId, CreatePlantLogForPlantRequest request)
         {
-            throw new NotImplementedException();
-            
-            var command = new CreatePlantCommand
-                {Id = Guid.NewGuid(), PlantSpeciesId = request.PlantSpeciesId, Name = request.Name};
+            var command = new CreatePlantLogForPlantCommand
+            {
+                Id = Guid.NewGuid(),
+                PlantId = plantId,
+                PlantLogTypeId = request.PlantLogTypeId,
+                Log = request.Log,
+                DateTime = request.DateTime,
+            };
             var response = await mediator.Send(command);
             if (!response.Success)
             {
                 return BadRequest(response.ErrorMessages);
             }
 
-            var createdQuery = new GetPlantByIdQuery {Id = command.Id};
+            var createdQuery = new GetPlantLogByIdQuery {Id = command.Id};
             var createdResult = await mediator.Send(createdQuery);
-            var createdObj = Plant.FromCore(createdResult.Data);
+            var createdObj = PlantLog.FromCore(createdResult.Data);
 
-            return CreatedAtAction(nameof(GetPlantLog), new {plantId = command.Id}, createdObj);
+            return CreatedAtAction(nameof(GetPlantLog), new {plantId = command.PlantId, logId = command.Id}, createdObj);
         }
-        
-        
     }
 }

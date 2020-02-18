@@ -55,6 +55,10 @@ namespace Isitar.PlantLogBook.Core.Tests
             var obj = await context.PlantLogTypes.FindAsync(id);
             Assert.Equal(id, obj.Id);
             Assert.Equal(name, obj.Name);
+            
+            var updateInvalidPlantLogType = new UpdatePlantLogTypeCommand {Id = Guid.NewGuid(), Name = "hehe"};
+            var resultInvalidPlantLogType = await cmdHandler.Handle(updateInvalidPlantLogType, CancellationToken.None);
+            Assert.False(resultInvalidPlantLogType.Success);
         }
 
         [Fact]

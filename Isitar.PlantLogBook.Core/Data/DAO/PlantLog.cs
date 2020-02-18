@@ -10,7 +10,7 @@ namespace Isitar.PlantLogBook.Core.Data.DAO
         public Plant Plant { get; set; }
 
         public Guid PlantLogTypeId { get; set; }
-        public PlantLogType LogType { get; set; }
+        public PlantLogType PlantLogType { get; set; }
 
         public DateTime DateTime { get; set; }
         public string Log { get; set; }

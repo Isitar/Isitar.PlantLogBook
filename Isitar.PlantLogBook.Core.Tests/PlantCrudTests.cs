@@ -81,6 +81,11 @@ namespace Isitar.PlantLogBook.Core.Tests
             Assert.Equal(name, obj.Name);
             Assert.Equal(PlantState.Inactive, obj.PlantState);
             Assert.Equal(plantSpecies1.Id, obj.PlantSpeciesId);
+            
+            var updateInvalidPlantCmd = new UpdatePlantCommand
+                {Id = Guid.NewGuid(), Name = name, IsActive = false, PlantSpeciesId = plantSpecies1.Id};
+            var result3 = await cmdHandler.Handle(updateInvalidPlantCmd, CancellationToken.None);
+            Assert.False(result3.Success);
         }
 
         [Fact]

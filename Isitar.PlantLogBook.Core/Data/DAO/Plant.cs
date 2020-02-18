@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Isitar.PlantLogBook.Core.Data.DAO
 {
@@ -7,6 +8,7 @@ namespace Isitar.PlantLogBook.Core.Data.DAO
         Active,
         Inactive
     }
+
     internal class Plant
     {
         public Guid Id { get; set; }
@@ -17,5 +19,7 @@ namespace Isitar.PlantLogBook.Core.Data.DAO
 
         public string Name { get; set; }
         public PlantState PlantState { get; set; }
+
+        public IEnumerable<PlantLog> PlantLogs { get; set; }
     }
 }

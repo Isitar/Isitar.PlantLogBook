@@ -1,7 +1,7 @@
 using System;
 namespace Isitar.PlantLogBook.Api.Contracts.V1.Requests
 {
-    public class GetAllPlantLogsRequest
+    public class GetAllPlantLogsForPlantRequest
     { 
         public Guid[] PlantLogTypes { get; set; }
 
