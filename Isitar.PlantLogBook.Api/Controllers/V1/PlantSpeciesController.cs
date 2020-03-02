@@ -22,12 +22,12 @@ namespace Isitar.PlantLogBook.Api.Controllers.V1
             this.mediator = mediator;
         }
 
-        [HttpGet(ApiRoutes.PlantSpecies.Get)]
+        [HttpGet(ApiRoutes.PlantSpecies.Get, Name = nameof(PlantSpeciesController) + "/" + nameof(Get))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<PlantSpecies>> Get(Guid plantSpeciesId)
+        public async Task<ActionResult<PlantSpecies>> Get(Guid speciesId)
         {
-            var query = new GetPlantSpeciesByIdQuery {Id = plantSpeciesId};
+            var query = new GetPlantSpeciesByIdQuery {Id = speciesId};
             var response = await mediator.Send(query);
             if (!response.Success)
             {
@@ -37,7 +37,7 @@ namespace Isitar.PlantLogBook.Api.Controllers.V1
             return Ok(PlantSpecies.FromCore(response.Data));
         }
 
-        [HttpGet(ApiRoutes.PlantSpecies.GetAll)]
+        [HttpGet(ApiRoutes.PlantSpecies.GetAll, Name = nameof(PlantSpeciesController) + "/" + nameof(GetAll))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<IList<PlantSpecies>>> GetAll([FromQuery] GetAllPlantSpeciesRequest request)
@@ -53,7 +53,7 @@ namespace Isitar.PlantLogBook.Api.Controllers.V1
             return Ok(responseData);
         }
 
-        [HttpPost(ApiRoutes.PlantSpecies.Create)]
+        [HttpPost(ApiRoutes.PlantSpecies.Create, Name = nameof(PlantSpeciesController) + "/" + nameof(Create))]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<PlantSpecies>> Create(CreatePlantSpeciesRequest request)
@@ -69,15 +69,15 @@ namespace Isitar.PlantLogBook.Api.Controllers.V1
             var createdResult = await mediator.Send(createdQuery);
             var createdObj = PlantSpecies.FromCore(createdResult.Data);
 
-            return CreatedAtAction(nameof(Get), new {plantSpeciesId = command.Id}, createdObj);
+            return CreatedAtRoute(nameof(PlantSpeciesController) + "/" + nameof(Get), new {speciesId = command.Id}, createdObj);
         }
 
-        [HttpPut(ApiRoutes.PlantSpecies.Update)]
+        [HttpPut(ApiRoutes.PlantSpecies.Update, Name = nameof(PlantSpeciesController) + "/" + nameof(Update))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<PlantSpecies>> Update(Guid plantSpeciesId, UpdatePlantSpeciesRequest request)
+        public async Task<ActionResult<PlantSpecies>> Update(Guid speciesId, UpdatePlantSpeciesRequest request)
         {
-            var command = new UpdatePlantSpeciesCommand {Id = plantSpeciesId, Name = request.Name};
+            var command = new UpdatePlantSpeciesCommand {Id = speciesId, Name = request.Name};
             var response = await mediator.Send(command);
             if (!response.Success)
             {
@@ -90,14 +90,14 @@ namespace Isitar.PlantLogBook.Api.Controllers.V1
 
             return Ok(updatedObj);
         }
-        
-        
-        [HttpDelete(ApiRoutes.PlantSpecies.Delete)]
+
+
+        [HttpDelete(ApiRoutes.PlantSpecies.Delete, Name = nameof(PlantSpeciesController) + "/" + nameof(Delete))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> Delete(Guid plantSpeciesId)
+        public async Task<ActionResult> Delete(Guid speciesId)
         {
-            var command = new DeletePlantSpeciesCommand {Id = plantSpeciesId};
+            var command = new DeletePlantSpeciesCommand {Id = speciesId};
             var response = await mediator.Send(command);
             if (!response.Success)
             {

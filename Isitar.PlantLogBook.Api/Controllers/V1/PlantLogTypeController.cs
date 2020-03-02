@@ -22,7 +22,7 @@ namespace Isitar.PlantLogBook.Api.Controllers.V1
             this.mediator = mediator;
         }
 
-        [HttpGet(ApiRoutes.PlantLogType.Get)]
+        [HttpGet(ApiRoutes.PlantLogType.Get, Name = nameof(PlantLogTypeController) + "/" + nameof(Get))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<PlantLogType>> Get(Guid plantLogTypeId)
@@ -37,7 +37,7 @@ namespace Isitar.PlantLogBook.Api.Controllers.V1
             return Ok(PlantLogType.FromCore(response.Data));
         }
 
-        [HttpGet(ApiRoutes.PlantLogType.GetAll)]
+        [HttpGet(ApiRoutes.PlantLogType.GetAll, Name = nameof(PlantLogTypeController) + "/" + nameof(GetAll))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<IList<PlantLogType>>> GetAll([FromQuery] GetAllPlantLogTypesRequest request)
@@ -53,7 +53,7 @@ namespace Isitar.PlantLogBook.Api.Controllers.V1
             return Ok(responseData);
         }
 
-        [HttpPost(ApiRoutes.PlantLogType.Create)]
+        [HttpPost(ApiRoutes.PlantLogType.Create, Name = nameof(PlantLogTypeController) + "/" + nameof(Create))]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<PlantLogType>> Create(CreatePlantLogTypeRequest request)
@@ -69,10 +69,10 @@ namespace Isitar.PlantLogBook.Api.Controllers.V1
             var createdResult = await mediator.Send(createdQuery);
             var createdObj = PlantLogType.FromCore(createdResult.Data);
 
-            return CreatedAtAction(nameof(Get), new {plantLogTypeId = command.Id}, createdObj);
+            return CreatedAtRoute(nameof(PlantLogTypeController) + "/" + nameof(Get), new {plantLogTypeId = command.Id}, createdObj);
         }
 
-        [HttpPut(ApiRoutes.PlantLogType.Update)]
+        [HttpPut(ApiRoutes.PlantLogType.Update, Name = nameof(PlantLogTypeController) + "/" + nameof(Update))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<PlantLogType>> Update(Guid plantLogTypeId, UpdatePlantLogTypeRequest request)
@@ -92,7 +92,7 @@ namespace Isitar.PlantLogBook.Api.Controllers.V1
         }
 
 
-        [HttpDelete(ApiRoutes.PlantLogType.Delete)]
+        [HttpDelete(ApiRoutes.PlantLogType.Delete, Name = nameof(PlantLogTypeController) + "/" + nameof(Delete))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> Delete(Guid plantLogTypeId)

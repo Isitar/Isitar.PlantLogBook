@@ -43,7 +43,7 @@ namespace Isitar.PlantLogBook.Api
             services.AddValidatorsFromAssembly(typeof(CreatePlantSpeciesCommand).Assembly);
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
             services.AddCors(options =>
-                options.AddPolicy("AllowAll", builder => { builder.WithOrigins("*").AllowAnyMethod(); })
+                options.AddPolicy("AllowAll", builder => { builder.AllowAnyOrigin().AllowAnyMethod(); })
             );
 
         }
@@ -51,13 +51,15 @@ namespace Isitar.PlantLogBook.Api
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, PlantLogBookContext dbContext)
         {
             dbContext.Database.Migrate();
-            
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 SwaggerSetup.ConfigureApplication(app);
+                app.UseCors("AllowAll");
             }
 
+            
             app.UseHttpsRedirection();
 
             app.UseRouting();
