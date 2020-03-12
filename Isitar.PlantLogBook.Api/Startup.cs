@@ -43,7 +43,10 @@ namespace Isitar.PlantLogBook.Api
             services.AddValidatorsFromAssembly(typeof(CreatePlantSpeciesCommand).Assembly);
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
             services.AddCors(options =>
-                options.AddPolicy("AllowAll", builder => { builder.AllowAnyOrigin().AllowAnyMethod(); })
+                options.AddPolicy("AllowAll", builder =>
+                {
+                    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader(); 
+                })
             );
 
         }

@@ -188,11 +188,11 @@ namespace Isitar.PlantLogBook.Api.Controllers.V1
                 return BadRequest(response.ErrorMessages);
             }
 
-            var createdQuery = new GetPlantLogByIdQuery {Id = command.Id};
+            var createdQuery = new GetPlantLogForPlantByIdQuery{Id = command.Id, PlantId = plantId};
             var createdResult = await mediator.Send(createdQuery);
             var createdObj = PlantLog.FromCore(createdResult.Data);
 
-            return CreatedAtRoute(nameof(PlantSpeciesController) + "/" + nameof(Get), new {plantId = command.PlantId, logId = command.Id}, createdObj);
+            return CreatedAtRoute(nameof(PlantController) + "/" + nameof(GetPlantLog), new {plantId = command.PlantId, logId = command.Id}, createdObj);
         }
     }
 }
